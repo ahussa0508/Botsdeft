@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sparx Cheats Portal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Orbitron', sans-serif;
+      background: linear-gradient(135deg, #0a2540, #1e90ff);
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .container {
+      text-align: center;
+      background: rgba(0, 0, 50, 0.85);
+      padding: 40px;
+      border-radius: 15px;
+      box-shadow: 0 0 30px #00ffee;
+      max-width: 90%;
+      width: 400px;
+    }
+
+    h1 {
+      font-size: 2em;
+      margin-bottom: 10px;
+    }
+
+    input {
+      padding: 12px;
+      width: 90%;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      margin-top: 15px;
+      outline: none;
+    }
+
+    button {
+      margin-top: 20px;
+      padding: 12px 30px;
+      background: linear-gradient(45deg, #00ffee, #00ccff);
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: bold;
+      color: #000;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 15px #00ffff;
+    }
+
+    .message {
+      margin-top: 20px;
+      font-weight: bold;
+    }
+
+    .sparkle {
+      animation: sparkle 1.5s ease-in-out infinite alternate;
+    }
+
+    @keyframes sparkle {
+      0% { text-shadow: 0 0 5px #0ff, 0 0 10px #0ff; }
+      100% { text-shadow: 0 0 15px #0ff, 0 0 30px #0ff; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 class="sparkle">✨ Sparx Cheats Portal ✨</h1>
+    <p>Enter your name to unlock cheat mode:</p>
+    <form id="cheatForm">
+      <input type="text" name="username" id="username" placeholder="e.g. Steve Jobs" required>
+      <input type="hidden" name="device" id="device">
+      <button type="submit">Activate</button>
+    </form>
+    <div class="message" id="feedbackMsg"></div>
+  </div>
+
+  <script>
+  const form = document.getElementById('cheatForm');
+  const msg = document.getElementById('feedbackMsg');
+  const deviceInput = document.getElementById('device');
+
+  function getFriendlyDevice() {
+    const ua = navigator.userAgent.toLowerCase();
+
+    if (ua.includes("iphone")) return "iPhone";
+    if (ua.includes("ipad")) return "iPad";
+    if (ua.includes("macintosh") || ua.includes("mac os")) return "MacBook";
+    if (ua.includes("windows")) return "Windows PC";
+    if (ua.includes("linux") && !ua.includes("android")) return "Linux Machine";
+    if (ua.includes("android")) {
+      if (ua.includes("samsung")) return "Samsung";
+      if (ua.includes("galaxy")) return "Galaxy";
+      return "Android";
+    }
+    return "Unknown";
+  }
+
+  deviceInput.value = getFriendlyDevice();
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const formData = new FormData(form);
+    const data = new URLSearchParams();
+    for (const pair of formData) {
+      data.append(pair[0], pair[1]);
+    }
+
+    try {
+      const res = await fetch("https://script.google.com/macros/s/AKfycbxN8gqD_XSlM8fIzedVgFfp5GXadH616bOmbuuEfg9BTdyRRU5WUqCCPFT6sAyyAfJQfQ/exec", {
+        method: 'POST',
+        body: data
+      });
+
+      if (res.ok) {
+        msg.textContent = "✅ Name received! Downloading your cheat now...";
+        msg.style.color = "#00ffcc";
+        form.reset();
+
+        const downloadLink = document.createElement('a');
+        downloadLink.href = 'SparxStuff.zip';
+        downloadLink.download = 'SparxStuff.zip';
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
+      } else {
+        msg.textContent = "⚠️ Something went wrong. Try again!";
+        msg.style.color = "#ff6666";
+      }
+    } catch (error) {
+      msg.textContent = "⚠️ Error sending your name. Check your internet or gremlins.";
+      msg.style.color = "#ff6666";
+    }
+  });
+  </script>
+</body>
+</html>
